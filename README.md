@@ -1,8 +1,8 @@
-# BAM_to_RedPop
+# BAM_to_redpop
 Takes BAM files as input and returns redpop results.
 
 ## Introduction
-redpop is a method developed by [Dr Ernest Turro](https://www.mountsinai.org/profiles/ernest-turro) for the identification of regulatory regions from a combination of ATAC-Seq and H3K27Ac ChIP-Seq libraries. The method followed here was described in this paper: https://www.nature.com/articles/s41586-020-2434-2
+redpop is a method developed by [Dr Ernest Turro](https://www.mountsinai.org/profiles/ernest-turro) for the identification of regulatory regions from a combination of ATAC-Seq and H3K27Ac ChIP-Seq libraries. The method followed here was originally described in Turro et al. (2020): https://www.nature.com/articles/s41586-020-2434-2
 
 ### Input files required
 - De-duplicated ATAC-Seq BAM files.
