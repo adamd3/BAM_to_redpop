@@ -10,9 +10,10 @@ redpop is a method developed by [Dr Ernest Turro](https://www.mountsinai.org/pro
 - Txt file containing a list of the ATAC-Seq library names (must match the BAM files)
 
 ### Software required
-- [redpop](https://gitlab.haem.cam.ac.uk/et341/redpop/)
 - [F-Seq](https://github.com/aboyle/F-seq)
+- [bedtools](https://bedtools.readthedocs.io/)
 - [R](https://www.r-project.org/)
+- [redpop](https://gitlab.haem.cam.ac.uk/et341/redpop/)
 
 ### R packages required
 - [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
