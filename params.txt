@@ -1,0 +1,15 @@
+## directory containing BAM input files
+bam_dir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac2-26/out/dedup"
+
+## directory for storing BED files for Fseq
+bed_dir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac2-26/out/bed/"
+
+## directory for storing Fseq peak calls
+fseq_dir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac2-26/out/fseq"
+
+## directory for BigWig files
+bigwig_dir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac-Adam/"
+
+mkdir -p $bed_dir
+mkdir -p $fseq_dir
+mkdir -p $bigwig_dir
