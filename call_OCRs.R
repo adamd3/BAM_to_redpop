@@ -27,8 +27,8 @@ if (genome=="hg38"){
     genome_obj = BSgenome.Hsapiens.UCSC.hg19
 }
 
-libNames <- read.table(libs_file, header=FALSE)
-fseq_paths <- paste0(fseq_dir,"/",libNames)
+libNames <- read.table(libs_file, header=FALSE)[,1]
+fseq_paths <- paste0(fseq_dir, "/", libNames, ".fseqPeaks")
 
 call_OCRs <- function(libNames, fseq_paths, genome_obj) {
     fseqPeaks <- sapply(fseq_paths, function(x) {
