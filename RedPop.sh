@@ -62,4 +62,9 @@ done
 # fseq_paths.txt = txt file with list of paths to Fseq peak calls (one per line)
 # genome = genome version (either hg19 or hg38)
 
-Rscript --vanilla call_OCRs.R libraries.txt $fseq_dir hg38
+R CMD BATCH call_OCRs.R libraries.txt $fseq_dir hg38
+
+R CMD BATCH --no-save --no-restore '--args $fseq_dir -hg38' call_OCRs.R call_OCRs.Rout
+
+
+R --slave --vanilla --file=call_OCRs.R --args $fseq_dir hg38 > call_OCRs.Rout
