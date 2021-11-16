@@ -2,6 +2,7 @@
 
 library(GenomicRanges)
 library(rtracklayer)
+library(ChIPpeakAnno)
 
 args = commandArgs(trailingOnly=TRUE)
 
