@@ -30,6 +30,9 @@ if (genome=="hg38"){
 libNames <- read.table(libs_file, header=FALSE)[,1]
 fseq_paths <- paste0(fseq_dir, "/", libNames, ".fseqPeaks")
 
+libNames <- libNames[file.exists(fseq_paths)]
+fseq_paths <- fseq_paths[file.exists(fseq_paths)]
+
 call_OCRs <- function(libNames, fseq_paths, genome_obj) {
     fseqPeaks <- sapply(fseq_paths, function(x) {
         toGRanges(
