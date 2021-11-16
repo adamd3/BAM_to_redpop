@@ -2,7 +2,9 @@
 Takes BAM files as input and returns redpop results.
 
 ## Introduction
-redpop is a method developed by [Dr Ernest Turro](https://www.mountsinai.org/profiles/ernest-turro) for the identification of regulatory regions from a combination of ATAC-Seq and H3K27Ac ChIP-Seq libraries. The method followed here was originally described in [Turro et al. (2020)](https://www.nature.com/articles/s41586-020-2434-2).
+redpop is a method developed by [Dr Ernest Turro](https://www.mountsinai.org/profiles/ernest-turro) for the identification of regulatory regions from a combination of ATAC-Seq and H3K27Ac ChIP-Seq libraries.
+
+The method followed here was originally described in [Turro *et al.* (2020)](https://www.nature.com/articles/s41586-020-2434-2).
 
 ### Input files required
 - De-duplicated ATAC-Seq BAM files.
@@ -28,7 +30,7 @@ The process can be summarised as follows:
 - scan OCRs for regulatory elements with redpop
 
 ### Open Chromatin Regions (OCRs)
-Following the procedure described in [Turro et al. (2020)](https://www.nature.com/articles/s41586-020-2434-2), only OCRs are scanned for regulatory elements. The procedure for identifying OCRs is as follows:
+Following the procedure described in [Turro *et al.* (2020)](https://www.nature.com/articles/s41586-020-2434-2), only OCRs are scanned for regulatory elements. The procedure for identifying OCRs is as follows:
 
 - resize all F-seq peaks calls to a minimum of 3.2 kb
 - merge overlapping peaks
