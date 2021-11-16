@@ -45,21 +45,7 @@ done
 
 
 ##------------------------------------------------------------------------------
-## Process Fseq peak sets and identify Open Chromatin Regions (OCRs) for RedPop
+## Identify Open Chromatin Regions (OCRs) for RedPop
 ##------------------------------------------------------------------------------
 
-## The procedure is based on methods described in Turro et al. (2020):
-## https://www.nature.com/articles/s41586-020-2434-2
-
-## The below function does the following:
-## - reads in Fseq peak calls for a set of samples;
-## - resizes all peaks to a minimum size of 3.2 kb;
-## - merges overlapping peaks;
-## - truncates merged coordinates so that none extend beyond end of chromosome;
-## - returns the processed peak set
-
-# libraries.txt = txt file with list of library names (one per line)
-# fseq_paths.txt = txt file with list of paths to Fseq peak calls (one per line)
-# genome = genome version (either hg19 or hg38)
-
-R --slave --vanilla call_OCRs.R $fseq_dir hg38 > call_OCRs.Rout
+Rscript --slave --vanilla call_OCRs.R libraries.txt $fseq_dir hg38 > call_OCRs.Rout

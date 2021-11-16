@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 
 library(GenomicRanges)
+library(rtracklayer)
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -68,12 +69,12 @@ call_OCRs <- function(libNames, fseq_paths, genome_obj) {
     keepChr <- standardChromosomes(gGr)
     keepChr <- keepChr[!keepChr %in% c("chrM", "MT", "chrY", "Y")]
     gGr <- keepSeqlevels(gGr, keepChr, pruning.mode = "coarse")
-    fseqPeaksProcessed <- sapply(peaksMergedReduced, function(x) {
+    fseqPeaksProcessed <- sapply(peaksMergedReduced, function(x){
         subsetByOverlaps(x, gGr, ignore.strand = TRUE)
     })
     names(fseqPeaksProcessed) <- libNames
     fseqPeaksProcessed
-})
+}
 
 fseqOCRs <- call_OCRs(libNames, fseq_paths, genome_obj)
 
