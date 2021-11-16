@@ -32,13 +32,14 @@ done
 ## also need to merge these.
 
 for library in $(awk '{print $1}' libraries.txt); do
+    mkdir -p $fseq_dir/$library
     /rds-d3/project/who1000/rds-who1000-cbrc/F-seq/dist~/fseq/bin/fseq \
-        -o $fseq_dir -of npf $bed_dir/$library.bed
+        -o $fseq_dir/$library -of npf $bed_dir/$library.bed
     ## Merge chromosomes:
-    cat ${fseq_dir}/{}/*[[:digit:]].npf ${fseq_dir}/{}/*X.npf ${fseq_dir}/{}/*Y.npf \
-        > ${fseq_dir}/{}/{}.fseqPeaks
-    mv ${fseq_dir}/**/*.fseqPeaks $fseq_dir/
-    rm -R -- ${fseq_dir}/*/
+    cat ${fseq_dir}/${library}/*[[:digit:]].npf \
+        ${fseq_dir}/${library}/*X.npf ${fseq_dir}/${library}/*Y.npf \
+        > ${fseq_dir}/$library.fseqPeaks
+    rm -rf ${fseq_dir}/${library}
 done
 
 
