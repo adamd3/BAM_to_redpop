@@ -26,12 +26,8 @@ The method followed here was originally described in [Turro *et al.* (2020)](htt
 The process can be summarised as follows:
 - generate BED files from de-duplicated ATAC-Seq BAMs
 - call ATAC-Seq peaks using F-Seq
-- identify open chromatin regions (OCRs) from ATAC-Seq peaks (see below)
+- identify open chromatin regions (OCRs) from ATAC-Seq peaks as follows:
+    - resize all F-seq peaks calls to a minimum of 3.2 kb
+    - merge overlapping peaks
+    - truncate merged coordinates so that none extend beyond end of chromosome
 - scan OCRs for regulatory elements with redpop
-
-### Open Chromatin Regions (OCRs)
-Following the procedure described in [Turro *et al.* (2020)](https://www.nature.com/articles/s41586-020-2434-2), only OCRs are scanned for regulatory elements. The procedure for identifying OCRs is as follows:
-
-- resize all F-seq peaks calls to a minimum of 3.2 kb
-- merge overlapping peaks
-- truncate merged coordinates so that none extend beyond end of chromosome
