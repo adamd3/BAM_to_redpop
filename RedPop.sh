@@ -8,14 +8,14 @@ source 'params.txt'
 
 
 ## Required files:
-## ATAC_libraries.txt = txt file containing ATAC-Seq library names (one per line)
+## chip_atac_combined.tsv = txt file containing ATAC-Seq library names (one per line)
 ## chip_atac_combined.tsv = tab delimited file matching ChIP-Seq and ATAC-Seq samples
 
 
 ##------------------------------------------------------------------------------
 ## Generate ATAC-Seq BED files for Fseq
 ##------------------------------------------------------------------------------
-for library in $(awk '{print $1}' ATAC_libraries.txt); do
+for library in $(awk 'FNR>1 {print $1}' chip_atac_combined.tsv); do
     bamToBed -i $bam_dir/$library.bam > $bed_dir/$library.bed
 done
 
@@ -32,7 +32,7 @@ done
 ## NOTE that Fseq outputs a separate file for each chromosome; hence
 ## also need to merge these.
 
-for library in $(awk '{print $1}' ATAC_libraries.txt); do
+for library in $(awk 'FNR>1 {print $1}' chip_atac_combined.tsv); do
     mkdir -p $fseq_dir/$library
     /rds-d3/project/who1000/rds-who1000-cbrc/F-seq/dist~/fseq/bin/fseq \
         -o $fseq_dir/$library -of npf $bed_dir/$library.bed
@@ -48,7 +48,7 @@ done
 ##------------------------------------------------------------------------------
 ## Identify Open Chromatin Regions (OCRs) for redpop
 ##------------------------------------------------------------------------------
-Rscript --vanilla call_OCRs.R ATAC_libraries.txt $fseq_dir hg38 \
+Rscript --vanilla call_OCRs.R chip_atac_combined.tsv $fseq_dir hg38 \
     2> call_OCRs.log &
 
 

@@ -7,7 +7,7 @@ library(ChIPpeakAnno)
 args = commandArgs(trailingOnly=TRUE)
 
 ## Function arguments:
-## 1. ATAC_libraries.txt = txt file containing ATAC-Seq library names (one per line)
+## 1. chip_atac_combined.tsv = tsv file matching ATAC-Seq and ChIP-Seq samples
 ## 2. fseq_dir = path to directory containing fseq peak calls
 ## 3. genome = human genome version (either `hg19` or `hg38`)
 
@@ -27,7 +27,7 @@ if (genome=="hg38"){
     genome_obj = BSgenome.Hsapiens.UCSC.hg19
 }
 
-libNames <- read.table(libs_file, header=FALSE)[,1]
+libNames <- read.table(libs_file, header=TRUE)[,1]
 fseq_paths <- paste0(fseq_dir, "/", libNames, ".fseqPeaks")
 
 libNames <- libNames[file.exists(fseq_paths)]
