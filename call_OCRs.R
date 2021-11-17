@@ -7,7 +7,7 @@ library(ChIPpeakAnno)
 args = commandArgs(trailingOnly=TRUE)
 
 ## Function arguments:
-## 1. libraries.txt = txt file containing ATAC-Seq library names (one per line)
+## 1. ATAC_libraries.txt = txt file containing ATAC-Seq library names (one per line)
 ## 2. fseq_dir = path to directory containing fseq peak calls
 ## 3. genome = human genome version (either `hg19` or `hg38`)
 
