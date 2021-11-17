@@ -32,3 +32,9 @@ The process can be summarised as follows:
     - merge overlapping peaks
     - truncate merged coordinates so that none extend beyond end of chromosome
 - scan OCRs for regulatory elements with redpop
+
+## Output
+The below files will be produced.
+- `BED` files, one per ATAC-Seq library
+- `unionOCRs.rds` contains the union of identified OCRs ([GRanges object](https://bioconductor.org/packages/devel/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html))
+- `*.redpop.rds` files (one per pair of ATAC/ChIP samples) with redpop hits ([GRanges objects](https://bioconductor.org/packages/devel/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html))
