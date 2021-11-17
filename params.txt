@@ -13,4 +13,3 @@ chipDatDir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPchip-Adam"
 
 mkdir -p $bed_dir
 mkdir -p $fseq_dir
-mkdir -p $bigwig_dir
