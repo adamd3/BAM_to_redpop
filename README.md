@@ -9,7 +9,6 @@ The method followed here was originally described in [Turro *et al.* (2020)](htt
 ### Input files required
 - De-duplicated ATAC-Seq BAM files.
 - Normalised BigWig track files for both ATAC-Seq and ChIP-Seq.
-- TXT file containing a list of the ATAC-Seq library names (must match the BAM files).
 - TSV file matching ATAC-Seq and ChIP-Seq samples.
 
 ### Software required
