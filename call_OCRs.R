@@ -82,6 +82,4 @@ call_OCRs <- function(libNames, fseq_paths, genome_obj) {
 
 fseqOCRs <- call_OCRs(libNames, fseq_paths, genome_obj)
 
-## get the union of all OCRs
-unionOCRs <- Reduce(GenomicRanges::union, fseqOCRs)
-saveRDS(unionOCRs,  "unionOCRs.rds")
+saveRDS(fseqOCRs,  "fseqOCRs.rds")

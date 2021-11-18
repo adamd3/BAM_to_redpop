@@ -23,7 +23,7 @@ if (!length(args)==3) {
 ##------------------------------------------------------------------------------
 ## read in data
 ##------------------------------------------------------------------------------
-fseqOCRs <- readRDS("unionOCRs.rds")
+fseqOCRs <- readRDS("fseqOCRs.rds")
 
 chip_atac_df <- read.table(in_df, header=TRUE)
 bwExt <- ".40.bw" ## file extension for BigWigs
@@ -38,9 +38,10 @@ chipF <- paste0(chipDatDir, "/", chip_atac_df$Chip_sample, bwExt)
 ## Run RedPop
 ##------------------------------------------------------------------------------
 lapply(1:nrow(chip_atac_df), function(x){
-    redres <- lapply(seq_along(fseqOCRs), function(y){
+    fseqOCR_selected <- fseqOCRs[redpop_df_1[x,]$ATAC_sample][[1]]
+    redres <- lapply(seq_along(fseqOCR_selected), function(y){
         tmp <- tryCatch(
-            redpop(atacF[x], chipF[x], fseqOCRs[y]),
+            redpop(atacF[x], chipF[x], fseqOCR_selected[y]),
             error = function(e) e
         )
         if(!inherits(tmp, "error")){

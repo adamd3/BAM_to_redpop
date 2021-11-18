@@ -37,5 +37,5 @@ The process can be summarised as follows:
 The below files will be produced.
 - `BED` files, one per ATAC-Seq library
 - `.fseqPeaks` - merged peak calls from [F-Seq](https://github.com/aboyle/F-seq) in [narrow peak format](https://software.broadinstitute.org/software/igv/node/270)
-- `unionOCRs.rds` contains the union of identified OCRs ([GRanges object](https://bioconductor.org/packages/devel/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html))
+- `fseqOCRs.rds` contains the identified OCRs ([GRanges objects](https://bioconductor.org/packages/devel/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html))
 - `*.redpop.rds` files (one per pair of ATAC/ChIP samples) with redpop hits ([GRanges objects](https://bioconductor.org/packages/devel/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html))
