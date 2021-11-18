@@ -38,7 +38,7 @@ chipF <- paste0(chipDatDir, "/", chip_atac_df$Chip_sample, bwExt)
 ## Run RedPop
 ##------------------------------------------------------------------------------
 lapply(1:nrow(chip_atac_df), function(x){
-    fseqOCR_selected <- fseqOCRs[redpop_df_1[x,]$ATAC_sample][[1]]
+    fseqOCR_selected <- fseqOCRs[chip_atac_df[x,]$ATAC_sample][[1]]
     redres <- lapply(seq_along(fseqOCR_selected), function(y){
         tmp <- tryCatch(
             redpop(atacF[x], chipF[x], fseqOCR_selected[y]),
