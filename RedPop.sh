@@ -29,18 +29,15 @@ done
 ## It has also been downloaded, compiled and stored in:
 ## /rds-d3/project/who1000/rds-who1000-cbrc/F-seq/
 
-## NOTE that Fseq outputs a separate file for each chromosome; hence
-## also need to merge these.
-
 for library in $(awk 'FNR>1 {print $1}' chip_atac_combined.tsv); do
     mkdir -p $fseq_dir/$library
     /rds-d3/project/who1000/rds-who1000-cbrc/F-seq/dist~/fseq/bin/fseq \
         -o $fseq_dir/$library -of npf $bed_dir/$library.bed
-    ## Merge chromosomes:
-    cat ${fseq_dir}/${library}/*[[:digit:]].npf \
-        ${fseq_dir}/${library}/*X.npf ${fseq_dir}/${library}/*Y.npf \
-        > ${fseq_dir}/$library.fseqPeaks
-    rm -rf ${fseq_dir}/${library}
+    # ## Merge chromosomes:
+    # cat ${fseq_dir}/${library}/*[[:digit:]].npf \
+    #     ${fseq_dir}/${library}/*X.npf ${fseq_dir}/${library}/*Y.npf \
+    #     > ${fseq_dir}/$library.fseqPeaks
+    # rm -rf ${fseq_dir}/${library}
 done
 
 

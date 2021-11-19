@@ -28,56 +28,85 @@ if (genome=="hg38"){
 }
 
 libNames <- read.table(libs_file, header=TRUE)[,1]
-fseq_paths <- paste0(fseq_dir, "/", libNames, ".fseqPeaks")
 
-libNames <- libNames[file.exists(fseq_paths)]
-fseq_paths <- fseq_paths[file.exists(fseq_paths)]
+
+fseq_paths <- lapply(libNames, function(x){
+    paste0(fseq_dir, "/",
+        paste0(x, "/",
+            dir(path = paste0(fseq_dir, "/", x, "/"), pattern="\\.npf$")
+        )
+    )
+})
+
+
+## remove sex chromosomes and mitochondrial genome:
+fseq_paths <- lapply(fseq_paths, function(x){
+    x <- x[!grepl("Y\\.npf",x)]
+    x <- x[!grepl("X\\.npf",x)]
+    x <- x[!grepl("MT\\.npf",x)]
+    x
+})
+
+
+libkeep <- unlist(lapply(fseq_paths, function(x) length(x)>1))
+
+fseq_paths <- fseq_paths[libkeep]
+libNames <- libNames[libkeep]
 
 call_OCRs <- function(libNames, fseq_paths, genome_obj) {
-    fseqPeaks <- sapply(fseq_paths, function(x) {
-        toGRanges(
-            x, format = "narrowPeak",
-            header = FALSE, use.names = FALSE
+    res <- lapply(fseq_paths, function(lib){
+        chr_names <- gsub("\\.npf","",gsub("\\/","",gsub(
+            paste(libNames,collapse="|"),"",
+            gsub(paste0(fseq_dir,"/"),"",lib)
+        )))
+        fseqPeaks <- sapply(lib, function(x) {
+            toGRanges(
+                x, format = "narrowPeak",
+                header = FALSE, use.names = FALSE
+            )
+        })
+        names(fseqPeaks) <- chr_names
+        largePeaks <- sapply(fseqPeaks, function(x) {
+            x[which(width(x) > 3200)]
+        })
+        smallPeaks <- sapply(fseqPeaks, function(x) {
+            x[which(width(x) <= 3200)]
+        })
+        ## set minimum peak size to 3.2 kb
+        smallPeaksResized <- sapply(smallPeaks, function(x) {
+            GenomicRanges::resize(
+                x, width = 3200, fix = "center",
+                ignore.strand = TRUE, use.names = TRUE
+            )
+        })
+        ## combine peaks and sort
+        peaksMerged <- sapply(seq_along(smallPeaksResized), function(x) {
+            sort(c(smallPeaksResized[[x]], largePeaks[[x]]))
+        })
+        names(peaksMerged) <- names(smallPeaksResized)
+        ## merge overlapping peaks
+        peaksMergedReduced <- sapply(peaksMerged, function(x) {
+            GenomicRanges::reduce(x)
+        })
+        ## truncate coordinates at the end of each chromosome
+        seqlevelsStyle(genome_obj) <- "Ensembl"
+        nContigs <- length(seqnames(genome_obj))
+        gGr <- GRanges(
+            seqnames = seqnames(genome_obj),
+            ranges = IRanges(start = rep(1, nContigs),
+            end = seqlengths(genome_obj)),
+            strand = rep("*", nContigs)
         )
+        gGr <- subset(gGr, seqnames %in% chr_names)
+        peaksMergedReduced <- lapply(seq_along(peaksMergedReduced), function(x){
+            chr <- names(peaksMergedReduced)[x]
+            chrGr <- subset(gGr, seqnames == chr)
+            subsetByOverlaps(peaksMergedReduced[[x]], chrGr, ignore.strand = TRUE)
+        })
+        peaksMergedReduced
     })
-    largePeaks <- sapply(fseqPeaks, function(x) {
-        x[which(width(x) > 3200)]
-    })
-    smallPeaks <- sapply(fseqPeaks, function(x) {
-        x[which(width(x) <= 3200)]
-    })
-    ## set minimum peak size to 3.2 kb
-    smallPeaksResized <- sapply(smallPeaks, function(x) {
-        GenomicRanges::resize(
-            x, width = 3200, fix = "center",
-            ignore.strand = TRUE, use.names = TRUE
-        )
-    })
-    ## combine and sort
-    peaksMerged <- sapply(seq_along(smallPeaksResized), function(x) {
-        sort(c(smallPeaksResized[[x]], largePeaks[[x]]))
-    })
-    ## merge overlapping peaks
-    peaksMergedReduced <- sapply(peaksMerged, function(x) {
-        GenomicRanges::reduce(x)
-    })
-    ## truncate coordinates at the end of each chromosome
-    seqlevelsStyle(genome_obj) <- "Ensembl"
-    nContigs <- length(seqnames(genome_obj))
-    gGr <- GRanges(
-        seqnames = seqnames(genome_obj),
-        ranges = IRanges(start = rep(1, nContigs),
-        end = seqlengths(genome_obj)),
-        strand = rep("*", nContigs)
-    )
-    keepChr <- standardChromosomes(gGr)
-    keepChr <- keepChr[!keepChr %in% c("chrM", "MT", "chrY", "Y")]
-    gGr <- keepSeqlevels(gGr, keepChr, pruning.mode = "coarse")
-    fseqPeaksProcessed <- sapply(peaksMergedReduced, function(x){
-        subsetByOverlaps(x, gGr, ignore.strand = TRUE)
-    })
-    names(fseqPeaksProcessed) <- libNames
-    fseqPeaksProcessed
+    names(res) <- libNames
+    res
 }
 
 fseqOCRs <- call_OCRs(libNames, fseq_paths, genome_obj)
