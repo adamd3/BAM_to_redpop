@@ -34,7 +34,7 @@ chip_atac_df <- subset(chip_atac_df,
     ATAC_sample %in% names(fseqOCRs) | Chip_sample %in% names(fseqOCRs)
 )
 
-atacF <- paste0(atacDatDir, "/", chip_atac_df$ATAC_sample, bwExt)
+atacF <- paste0(atacDatDir, "/", chip_atac_df[[ATAC_sample]], bwExt)
 chipF <- paste0(chipDatDir, "/", chip_atac_df$Chip_sample, bwExt)
 
 
@@ -42,22 +42,30 @@ chipF <- paste0(chipDatDir, "/", chip_atac_df$Chip_sample, bwExt)
 ## Run RedPop
 ##------------------------------------------------------------------------------
 lapply(1:nrow(chip_atac_df), function(x){
-    OCRs <- fseqOCRs[chip_atac_df[x,]$ATAC_sample][[1]]
-    fseqOCR_selected <- fseqOCRs[chip_atac_df[x,]$ATAC_sample][[1]]
-    redres <- lapply(seq_along(fseqOCR_selected), function(y){
-        tmp <- tryCatch(
-            redpop(atacF[x], chipF[x], fseqOCR_selected[y]),
-            error = function(e) e
-        )
-        if(!inherits(tmp, "error")){
-            res <- NA
-            if (length(tmp$res) > 0) res <- tmp
-        } else {
-            res <- NA
-        }
-        return(res)
-    })
-    redres <- redres[!is.na(redres)]
+    ## subset to OCRs in this sample (one per chromosome)
+    sample_OCRs <- fseqOCRs[chip_atac_df[x,][["ATAC_sample"]]][[1]]
+    atac_file <- atacF[x]
+    chip_file <- chipF[x]
+    ## idenitifier for the sample:
     sample <- paste0(chip_atac_df$Individual,"_",chip_atac_df$Time)[x]
-    saveRDS(redres, file = paste0(sample,".redpop.rds"))
+    lapply(seq_along(sample_OCRs), function(chr_idx){
+        chr_name <- names(sample_OCRs)[chr_idx]
+        outf <- paste0(sample, "_chr", chr_name)
+        chr_ocrs <- sample_OCRs[chr_idx][[1]]
+        chr_res <- lapply(seq_along(chr_ocrs), function(y){
+            tmp <- tryCatch(
+                redpop(atac_file, chip_file, chr_ocrs[y]),
+                error = function(e) e
+            )
+            if(!inherits(tmp, "error")){
+                res <- NA
+                if (length(tmp$res) > 0) res <- tmp
+            } else {
+                res <- NA
+            }
+            return(res)
+        })
+        chr_res <- chr_res[!is.na(chr_res)]
+        saveRDS(chr_res, file = paste0(outf,".redpop.rds"))
+    })
 })
