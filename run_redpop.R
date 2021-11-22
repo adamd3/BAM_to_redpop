@@ -34,8 +34,8 @@ chip_atac_df <- subset(chip_atac_df,
     ATAC_sample %in% names(fseqOCRs) | Chip_sample %in% names(fseqOCRs)
 )
 
-atacF <- paste0(atacDatDir, "/", chip_atac_df[[ATAC_sample]], bwExt)
-chipF <- paste0(chipDatDir, "/", chip_atac_df$Chip_sample, bwExt)
+atacF <- paste0(atacDatDir, "/", chip_atac_df[["ATAC_sample"]], bwExt)
+chipF <- paste0(chipDatDir, "/", chip_atac_df[["Chip_sample"]], bwExt)
 
 
 ##------------------------------------------------------------------------------
