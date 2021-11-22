@@ -103,6 +103,7 @@ call_OCRs <- function(libNames, fseq_paths, genome_obj) {
             chrGr <- subset(gGr, seqnames == chr)
             subsetByOverlaps(peaksMergedReduced[[x]], chrGr, ignore.strand = TRUE)
         })
+        names(peaksMergedReduced) <- names(peaksMerged)
         peaksMergedReduced
     })
     names(res) <- libNames

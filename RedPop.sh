@@ -54,4 +54,4 @@ Rscript --vanilla call_OCRs.R chip_atac_combined.tsv $fseq_dir hg38 \
 ## Run redpop
 ##------------------------------------------------------------------------------
 Rscript --vanilla run_redpop.R chip_atac_combined.tsv $atacDatDir $chipDatDir \
-    2> run_redpop.log &
+    $bwExt 2> run_redpop.log &

@@ -11,5 +11,8 @@ fseq_dir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac2-26/out/fseq"
 atacDatDir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPatac-Adam"
 chipDatDir="/rds-d3/project/who1000/rds-who1000-cbrc/analysis/BPchip-Adam"
 
+## file extension for BigWigs
+bwExt=".40.bw"
+
 mkdir -p $bed_dir
 mkdir -p $fseq_dir
