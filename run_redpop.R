@@ -12,8 +12,8 @@ args = commandArgs(trailingOnly=TRUE)
 ## 4. bwExt = File extension for BigWigs
 ## 5. chr_select = Selected chromosome to scan
 
-if (!length(args)==4) {
-    stop("Must supply exactly 4 arguments")
+if (!length(args)<4) {
+    stop("Must supply at least 4 arguments")
 } else {
     in_df = args[1]
     atacDatDir = args[2]
