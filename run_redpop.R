@@ -10,6 +10,7 @@ args = commandArgs(trailingOnly=TRUE)
 ## 2. atacDatDir = Directory containing ATAC-Seq BigWig files
 ## 3. chipDatDir = Directory containing ChIP-Seq BigWig files
 ## 4. bwExt = File extension for BigWigs
+## 5. chr_select = Selected chromosome to scan
 
 if (!length(args)==4) {
     stop("Must supply exactly 4 arguments")
@@ -18,6 +19,7 @@ if (!length(args)==4) {
     atacDatDir = args[2]
     chipDatDir = args[3]
     bwExt = args[4]
+    chr_select = args[5]
 }
 
 
@@ -44,15 +46,40 @@ chipF <- paste0(chipDatDir, "/", chip_atac_df[["Chip_sample"]], bwExt)
 lapply(1:nrow(chip_atac_df), function(x){
     ## subset to OCRs in this sample (one per chromosome)
     sample_OCRs <- fseqOCRs[chip_atac_df[x,][["ATAC_sample"]]][[1]]
+    sample_OCRs <- subset(sample_OCRs, names(sample_OCRs)==chr_select)
     atac_file <- atacF[x]
     chip_file <- chipF[x]
     ## idenitifier for the sample:
     sample <- paste0(chip_atac_df$Individual,"_",chip_atac_df$Time)[x]
-    lapply(seq_along(sample_OCRs), function(chr_idx){
-        chr_name <- names(sample_OCRs)[chr_idx]
+    if(length(sample_OCRs)>1){
+        lapply(seq_along(sample_OCRs), function(chr_idx){
+            chr_name <- names(sample_OCRs)[chr_idx]
+            outf <- paste0(sample, "_chr", chr_name)
+            chr_ocrs <- sample_OCRs[chr_idx][[1]]
+            chr_res <- lapply(seq_along(chr_ocrs), function(y){
+                tmp <- tryCatch(
+                    redpop(atac_file, chip_file, chr_ocrs[y]),
+                    error = function(e) e
+                )
+                if(!inherits(tmp, "error")){
+                    res <- NA
+                    if (length(tmp$res) > 0) res <- tmp
+                } else {
+                    res <- NA
+                }
+                return(res)
+            })
+            chr_res <- chr_res[!is.na(chr_res)]
+            saveRDS(chr_res, file = paste0(outf,".redpop.rds"))
+        })
+    } else {
+        chr_name <- chr_select
         outf <- paste0(sample, "_chr", chr_name)
-        chr_ocrs <- sample_OCRs[chr_idx][[1]]
-        chr_res <- lapply(seq_along(chr_ocrs), function(y){
+        chr_ocrs <- sample_OCRs[[1]]
+        chr_res <- lapply(seq_along(chr_ocrs)[1:10], function(y){
+            tmp <- redpop(atac_file, chip_file, chr_ocrs[y])
+            length(tmp$res)
+
             tmp <- tryCatch(
                 redpop(atac_file, chip_file, chr_ocrs[y]),
                 error = function(e) e
@@ -67,5 +94,5 @@ lapply(1:nrow(chip_atac_df), function(x){
         })
         chr_res <- chr_res[!is.na(chr_res)]
         saveRDS(chr_res, file = paste0(outf,".redpop.rds"))
-    })
+    }
 })
