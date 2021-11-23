@@ -22,6 +22,8 @@ if (!length(args)==4) {
     chr_select = args[5]
 }
 
+source("redpop_v2.R")
+source("redpop_helpers.R")
 
 
 ##------------------------------------------------------------------------------
@@ -58,7 +60,7 @@ lapply(1:nrow(chip_atac_df), function(x){
             chr_ocrs <- sample_OCRs[chr_idx][[1]]
             chr_res <- lapply(seq_along(chr_ocrs), function(y){
                 tmp <- tryCatch(
-                    redpop(atac_file, chip_file, chr_ocrs[y]),
+                    redpop_v2(atac_file, chip_file, chr_ocrs[y]),
                     error = function(e) e
                 )
                 if(!inherits(tmp, "error")){
@@ -76,12 +78,9 @@ lapply(1:nrow(chip_atac_df), function(x){
         chr_name <- chr_select
         outf <- paste0(sample, "_chr", chr_name)
         chr_ocrs <- sample_OCRs[[1]]
-        chr_res <- lapply(seq_along(chr_ocrs)[1:10], function(y){
-            tmp <- redpop(atac_file, chip_file, chr_ocrs[y])
-            length(tmp$res)
-
+        chr_res <- lapply(seq_along(chr_ocrs)[1:300], function(y){
             tmp <- tryCatch(
-                redpop(atac_file, chip_file, chr_ocrs[y]),
+                redpop_v2(atac_file, chip_file, chr_ocrs[y]),
                 error = function(e) e
             )
             if(!inherits(tmp, "error")){

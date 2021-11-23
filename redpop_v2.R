@@ -11,9 +11,9 @@ redpop_v2 <- function(atac.bw, h3k27ac.bw, sel.range,
   stopifnot(length(sel.range)==1)
 
   if(class(atac.bw)!="GRanges")
-    atac.gr=import(BigWigFile(atac.bw), selection = sel.range )
+    atac.gr=rtracklayer::import(rtracklayer::BigWigFile(atac.bw), selection = sel.range )
   if(class(h3k27ac.bw)!="GRanges")
-    h3k27ac.gr=import(BigWigFile(h3k27ac.bw), selection = sel.range )
+    h3k27ac.gr=rtracklayer::import(rtracklayer::BigWigFile(h3k27ac.bw), selection = sel.range )
 
 
   ## AD: extend the scores from the (binned) bigwig across the range:
