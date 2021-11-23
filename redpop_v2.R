@@ -1,23 +1,5 @@
-#' Regulatory Element Detection using Patterns Of Peaks
-#'
-#' @param atac.bw Path to 40bp-binned, normalised ATAC-seq BigWig file, or a \code{GRanges} object
-#' @param h3k27ac.bw Path to 40bp-binned, normalised H3K27ac ChIP-seq BigWig file, or a \code{GRanges} object
-#' @param sel.range \code{GRanges} object with a single row specifying where to search for regulatory elements
-#' @param smooth.cov.thres Covariance minima between ATAC and H3K27ac need to be below this threshold
-#' @param atac.thres Minimum ATAC height
-#' @param peakiness.flank Flank used to define whether, locally, ATAC > H3K27ac or vice versa
-#' @param covariance.flank Flank used to compute local covariance between ATAC and H3K27ac
-#' @param smoothing.flank Flank used to smooth the covariances before identifying minima
-#' @param local.min.flank Flank used to assess whether a smoothed covariance is a local minimum
-#' @param peakiness.net Include all segments within these many bp from covariance minimum that have the correct peakiness
-#' @return A \code{redpop} object
-#' @importFrom GenomicRanges setdiff GRanges reduce ranges mcols mcols<- seqnames GRangesList
-#' @importFrom BiocGenerics start end width
-#' @importFrom IRanges IRanges
-#' @importFrom methods as
-#' @importFrom rtracklayer import BigWigFile
-#' @importFrom GenomeInfoDb seqlevels<-
-#' @export
+
+
 redpop_v2 <- function(atac.bw, h3k27ac.bw, sel.range,
                   smooth.cov.thres=-1,
                   atac.thres=47,
