@@ -53,5 +53,19 @@ Rscript --vanilla call_OCRs.R chip_atac_combined.tsv $fseq_dir hg38 \
 ##------------------------------------------------------------------------------
 ## Run redpop
 ##------------------------------------------------------------------------------
-Rscript --vanilla run_redpop.R chip_atac_combined.tsv $atacDatDir $chipDatDir \
-    $bwExt 1 2> run_redpop.log &
+# Rscript --vanilla run_redpop.R chip_atac_combined.tsv $atacDatDir $chipDatDir \
+#     $bwExt 2> run_redpop.log &
+
+
+## split the input file for parallel processing
+tail -n +2 ../chip_atac_combined.tsv | split -l 4 - split_
+for file in split_*
+do
+    head -n 1 ../chip_atac_combined.tsv > tmp_file
+    cat "$file" >> tmp_file
+    mv -f tmp_file "$file"
+done
+
+## `all` = scan all chromosomes; 1 = scan only chromosome 1, 2 = only 2, etc.
+parallel Rscript --vanilla run_redpop.R {} $atacDatDir $chipDatDir \
+    $bwExt all ::: split_*  2> run_redpop.log
