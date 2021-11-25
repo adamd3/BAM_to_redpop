@@ -82,7 +82,7 @@ lapply(1:nrow(chip_atac_df), function(x){
         chr_name <- chr_select
         outf <- paste0(sample, "_chr", chr_name)
         chr_ocrs <- sample_OCRs[[1]]
-        chr_res <- lapply(seq_along(chr_ocrs)[1:300], function(y){
+        chr_res <- lapply(seq_along(chr_ocrs), function(y){
             tmp <- tryCatch(
                 redpop_v2(atac_file, chip_file, chr_ocrs[y]),
                 error = function(e) e
