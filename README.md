@@ -15,9 +15,9 @@ The method followed here was originally described in [Turro *et al.* (2020)](htt
 - [F-Seq](https://github.com/aboyle/F-seq)
 - [bedtools](https://bedtools.readthedocs.io/)
 - [R](https://www.r-project.org/)
-- [redpop](https://gitlab.haem.cam.ac.uk/et341/redpop/)
 
 ### R packages required
+- [redpop](https://gitlab.haem.cam.ac.uk/et341/redpop/)
 - [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
 - [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html)
 - [GenomeInfoDb](https://bioconductor.org/packages/release/bioc/html/GenomeInfoDb.html)
