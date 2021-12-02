@@ -21,7 +21,6 @@ The method followed here was originally described in [Turro *et al.* (2020)](htt
 - [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html)
 - [rtracklayer](https://bioconductor.org/packages/release/bioc/html/rtracklayer.html)
 - [GenomeInfoDb](https://bioconductor.org/packages/release/bioc/html/GenomeInfoDb.html)
-- [ChIPpeakAnno](https://bioconductor.org/packages/release/bioc/html/ChIPpeakAnno.html)
 
 ## Overview of method
 The process can be summarised as follows:
