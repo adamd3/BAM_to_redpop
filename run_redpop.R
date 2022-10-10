@@ -99,3 +99,82 @@ lapply(1:nrow(chip_atac_df), function(x){
         saveRDS(chr_res, file = paste0(outf,".redpop.rds"))
     }
 })
+
+
+## Scan just the AURKAIP hit in CF002:
+
+#                ATAC_sample            Chip_sample Individual Time
+# 2 SLX16960CF0020MonoATAC_A SLX20032i704i506Chip_A      CF002    0
+# 3  SLX16960Ad002MonoATAC_A SLX20032i710i507Chip_A      CF002   14
+
+atac_samps <- subset(chip_atac_df, Individual=="CF002")[["ATAC_sample"]]
+chip_samps <- subset(chip_atac_df, Individual=="CF002")[["Chip_sample"]]
+
+atacF <- paste0(atacDatDir, "/", atac_samps, bwExt)
+chipF <- paste0(chipDatDir, "/",chip_samps, bwExt)
+
+sample_OCRs_Day0 <- (fseqOCRs[atac_samps[1]][[1]])[1][[1]]
+sample_OCRs_Day14 <- (fseqOCRs[atac_samps[2]][[1]])[1][[1]]
+
+length(sample_OCRs_Day0)
+# [1] 12575
+length(sample_OCRs_Day14)
+# [1] 15892
+
+
+## get the index of the selected hit:
+grtest <- GRanges(
+    seqnames = "1", ranges=IRanges(start=1273785,width=1),strand = c('*'))
+
+selected_hit <- as.data.frame(findOverlaps(sample_OCRs_Day0,grtest))[,1]
+selected_hit
+# [1] 41
+
+sample_OCRs_Day0[41]
+# GRanges object with 1 range and 0 metadata columns:
+#       seqnames          ranges strand
+#          <Rle>       <IRanges>  <Rle>
+#   [1]        1 1271713-1275426      *
+#   -------
+#   seqinfo: 1 sequence from an unspecified genome; no seqlengths
+
+
+## get the index of the selected hit:
+grtest <- GRanges(
+    seqnames = "1", ranges=IRanges(start=1273785,width=1),strand = c('*'))
+
+selected_hit <- as.data.frame(findOverlaps(sample_OCRs_Day14,grtest))[,1]
+selected_hit
+# [1] 46
+
+sample_OCRs_Day14[46]
+# GRanges object with 1 range and 0 metadata columns:
+#       seqnames          ranges strand
+#          <Rle>       <IRanges>  <Rle>
+#   [1]        1 1263583-1276694      *
+#   -------
+#   seqinfo: 1 sequence from an unspecified genome; no seqlengths
+
+
+
+## Day 0
+redpop_v2(
+    atacF[1], chipF[1], sample_OCRs_Day0[41],
+    atac.thres=30
+)$res
+# GRanges object with 0 ranges and 2 metadata columns:
+#    seqnames    ranges strand | nearest_min_cov  max_atac
+#       <Rle> <IRanges>  <Rle> |       <numeric> <numeric>
+#   -------
+#   seqinfo: 1 sequence from an unspecified genome; no seqlengths
+
+## Day 14
+redpop_v2(
+    atacF[2], chipF[2], sample_OCRs_Day14[46]
+)$res
+# GRanges object with 1 range and 2 metadata columns:
+#      seqnames          ranges strand | nearest_min_cov  max_atac
+#         <Rle>       <IRanges>  <Rle> |       <numeric> <numeric>
+#  [1]        1 1273825-1274061      * |        -261.423    63.893
+#  -------
+#  seqinfo: 1 sequence from an unspecified genome; no seqlengths
